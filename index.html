@@ -9,14 +9,14 @@
 </head>
 <body>
     
-    <div id="#main-div">
+    <div id="main-div">
         <div id="header"><h2>Discussion Portal</h2></div>
         
         <div id="main2-div">
             <div id="left-pane">
-                <div>
-                    <button id="new-ques-form">New Question form</button>
-                    <input type="text" id ="search-questions" placeholder="search questions...">
+                <div id="left-pane-header">
+                    <button id="new-ques-form" class="left-pane-inputs">New Question form</button>
+                    <input type="text" class="left-pane-inputs" id ="search-questions" placeholder="search questions...">
                 </div>
 
                 <div id="show-here"></div>
@@ -28,9 +28,41 @@
                 <h4>Enter a subject and question to get started</h4>
 
                 <div id="sub-ques-input">
-                    <input type="text" id="subject" placeholder="Subjedct">
-                    <textarea name="question" id="question"></textarea>
+                    <input type="text" id="subject" placeholder="Subject">
+                    <textarea name="question" id="question" placeholder="Question"></textarea>
                     <button id="submit">Submit</button>
+                </div>
+            </div>
+            <div id="right-pane2">
+                <div id="ques-resolvebtn-div">
+                    <p>Question</p>
+                    <div id="sub-header">
+                        <div id="ques-header"> 
+                            <h3 id="right-pane2-h3">test heading</h3>
+                            <p id="right-pane2-p">test question</p>
+                        </div>
+                        <p id = "vote-cnt" >0</p>
+                        <div id="vote-div">
+                            <button id="up-vote">&uarr;</button>
+                            <button id="down-vote">&darr;</button>
+                        </div>
+                    </div>
+                    <button id="resolveBtn">Resolve</button>
+                </div>
+                <div id="rp2-input-div" class="rp2-input-div">
+                    <p style="padding: 0.3rem;">Response</p>
+                    <div id="response-list-parent">
+                        <!-- <div class="response-list-div">
+                            <h3 id="right-pane2-h3">test heading</h3>
+                            <p id="right-pane2-p">test question</p>
+                        </div> -->
+                    </div>
+                    <div id="add-Response-Div">
+                        <p>Add Response</p>
+                        <input type="text" id="respone-enter-name" placeholder="Enter name">
+                        <textarea id="responeTxt" name="responeTxt" placeholder="Enter comment"></textarea>
+                        <button id="responseSubmitBtn">Submit</button>
+                    </div>
                 </div>
             </div>
         </div>
