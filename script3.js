@@ -374,7 +374,20 @@ function showData(){
     dataRetrieved = JSON.parse(localStorage.getItem('data'));
     console.log(dataRetrieved,typeof dataRetrieved,"show data");
 
-    
+    dataRetrieved = dataRetrieved.sort(function(a,b){
+        console.log("sorting");
+        if(a.isFav < b.isFav) return 1;
+        else if( a.voteCnt > b.voteCnt ) return -1;
+        else if( a.voteCnt < b.voteCnt ) return 1;
+        else return 0;
+    });
+
+    console.log(dataRetrieved);
+
+    dataRetrieved = JSON.stringify(dataRetrieved);
+    localStorage.setItem('data',dataRetrieved);
+
+    dataRetrieved = JSON.parse(localStorage.getItem('data'));
 
     for(let i = 0; i < dataRetrieved.length;i++){
         dataRetrieved.id = i;
@@ -460,6 +473,19 @@ function openThisQues(currQuesId){
     voteCntP.innerText = dataRetrieved[currQuesId].voteCnt;
 
     theDivParent.innerHTML = "";
+
+    // sorting responses
+    let respnseArr = dataRetrieved[currQuesId].response;
+    respnseArr.sort(function(a,b){
+        if(a.rspnseVote > b.rspnseVote) return -1;
+        else return 1;
+    });
+    dataRetrieved[currQuesId].response = respnseArr;
+    dataRetrieved = JSON.stringify(dataRetrieved);
+    localStorage.setItem('data',dataRetrieved);
+
+    dataRetrieved = JSON.parse(localStorage.getItem('data'));
+
     for(let i=0;i<dataRetrieved[currQuesId].response.length;i++){
         let subHeaderDiv = document.createElement('div');
             subHeaderDiv.className = "sub-header";
