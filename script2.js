@@ -141,7 +141,8 @@ responseSubmitBtn.addEventListener('click',function(){
 
         let responseObj = {
             name:"",
-            response:""
+            response:"",
+            rspnseVote:0
         }
 
         responseObj.name = uName;
@@ -156,55 +157,85 @@ responseSubmitBtn.addEventListener('click',function(){
         dataRetrieved = JSON.stringify(dataRetrieved);
         localStorage.setItem('data',dataRetrieved);
 
-
         // console.log(currQuesId,"inside response submi btn");
         dataRetrieved = JSON.parse(localStorage.getItem('data'));
         theDivParent.innerHTML = "";
         for(let i=0;i<dataRetrieved[currQuesId].response.length;i++){
-            // creating div here
 
-            let theDivContainer = document.createElement('div');
-            theDivContainer.className = "sub-header";
+            let subHeaderDiv = document.createElement('div');
+            subHeaderDiv.className = "sub-header";
 
-            let theDiv = document.createElement('div');
-            theDiv.className = "response-list-div";
+                let respnseDataDiv = document.createElement('div');
+                respnseDataDiv.className = "respnse-data";
 
-            let theH3 = document.createElement('h3');
-            theH3.className = "right-pane2-h3";
-            theH3.innerText = dataRetrieved[currQuesId].response[i].name;
-            theDiv.appendChild(theH3);
+                    let theH3 = document.createElement('h3');
+                    theH3.className = "right-pane2-h3";
+                    theH3.innerText = dataRetrieved[currQuesId].response[i].name;
+                    respnseDataDiv.appendChild(theH3);
 
-            let theP = document.createElement('p');
-            theP.className = "right-pane2-p";
-            theP.innerText = dataRetrieved[currQuesId].response[i].response;
-            theDiv.appendChild(theP);
+                    let theP = document.createElement('p');
+                    theP.className = "right-pane2-p";
+                    theP.innerText = dataRetrieved[currQuesId].response[i].response;
+                    respnseDataDiv.appendChild(theP);
 
+                subHeaderDiv.appendChild(respnseDataDiv);
 
-
-            // 
-            let theVoteP2 = document.createElement('p');
-            theVoteP2.innerText = "jjj";
-            theVoteP2.innerText="00";
-            theVoteP2.class = "vote-cnt";
-
-
-            let theBtnDiv = document.createElement('div');
-            theBtnDiv.className ="vote-div"
-
-            let btnUp = document.createElement('button');
-            btnUp.className = "up-vote";
-            btnUp.innerHTML = "&uarr;";
-            theBtnDiv.appendChild(btnUp);
+                let theVoteP = document.createElement('p');
+                theVoteP.className = "vote-cnt";
+                theVoteP.id = `vote-cnt-${i}`;
+                theVoteP.innerText = dataRetrieved[currQuesId].response[i].rspnseVote;
+                subHeaderDiv.appendChild(theVoteP);
             
-            let btnDown = document.createElement('button');
-            btnDown.className = "down-vote";
-            btnUp.innerHTML = "&darr;";
-            theBtnDiv.appendChild(btnDown);
+            let voteDiv = document.createElement('div');
+            voteDiv.className = "vote-div";
 
-            theDivContainer.appendChild(theDiv);
-            theDivContainer.appendChild(theVoteP2);
-            theDivContainer.appendChild(theBtnDiv);
-            theDivParent.appendChild(theDivContainer);
+                let btnUp = document.createElement('button');
+                btnUp.className = "up-vote";
+                btnUp.id = `up-vote-${i}`;
+                btnUp.innerHTML = "&uarr;";
+                voteDiv.appendChild(btnUp);
+                btnUp.addEventListener('click',function(){
+                    console.log(currQuesId,"inside rspnde upbtn openthiss()");
+                    console.log(this.id);
+
+                    let curResId = this.id;
+                    curResId = curResId.replace("up-vote-","");
+
+                    dataRetrieved = JSON.parse(localStorage.getItem('data'));
+                    dataRetrieved[currQuesId].response[curResId].rspnseVote++;
+
+                    let resVoteCntP = document.getElementById(`vote-cnt-${curResId}`);
+                    resVoteCntP.innerText = dataRetrieved[currQuesId].response[curResId].rspnseVote;
+
+                    dataRetrieved = JSON.stringify(dataRetrieved);
+                    localStorage.setItem('data',dataRetrieved);
+                });
+
+                let btnDown = document.createElement('button');
+                btnDown.className = "down-vote";
+                btnDown.id = `down-vote-${i}`;
+                btnDown.innerHTML = "&darr;";
+                voteDiv.appendChild(btnDown);
+                btnDown.addEventListener('click',function(){
+                    console.log(currQuesId,"inside rspnde dwnbtn openthiss()");
+                    console.log(this.id);
+
+                    let curResId = this.id;
+                    curResId = curResId.replace("down-vote-","");
+
+                    dataRetrieved = JSON.parse(localStorage.getItem('data'));
+                    dataRetrieved[currQuesId].response[curResId].rspnseVote--;
+
+                    let resVoteCntP = document.getElementById(`vote-cnt-${curResId}`);
+                    resVoteCntP.innerText = dataRetrieved[currQuesId].response[curResId].rspnseVote;
+
+                    dataRetrieved = JSON.stringify(dataRetrieved);
+                    localStorage.setItem('data',dataRetrieved);
+                });
+
+
+            subHeaderDiv.appendChild(voteDiv);
+            theDivParent.appendChild(subHeaderDiv);
         }
 
         clearFields();
@@ -314,7 +345,6 @@ function showData(){
     localStorage.setItem('data',dataRetrieved);
 }
 
-
 function openThisQues(currQuesId){
     // console.log(currQuesId, typeof currQuesId, "1");
     currQuesId = currQuesId.replace("subh3-","");
@@ -329,21 +359,79 @@ function openThisQues(currQuesId){
 
     theDivParent.innerHTML = "";
     for(let i=0;i<dataRetrieved[currQuesId].response.length;i++){
-        // creating div here
-        let theDiv = document.createElement('div');
-        theDiv.className = "response-list-div";
+        let subHeaderDiv = document.createElement('div');
+            subHeaderDiv.className = "sub-header";
 
-        let theH3 = document.createElement('h3');
-        theH3.className = "right-pane2-h3";
-        theH3.innerText = dataRetrieved[currQuesId].response[i].name;
-        theDiv.appendChild(theH3);
+                let respnseDataDiv = document.createElement('div');
+                respnseDataDiv.className = "respnse-data";
 
-        let theP = document.createElement('p');
-        theP.className = "right-pane2-p";
-        theP.innerText = dataRetrieved[currQuesId].response[i].response;
-        theDiv.appendChild(theP);
+                    let theH3 = document.createElement('h3');
+                    theH3.className = "right-pane2-h3";
+                    theH3.innerText = dataRetrieved[currQuesId].response[i].name;
+                    respnseDataDiv.appendChild(theH3);
 
-        theDivParent.appendChild(theDiv);
+                    let theP = document.createElement('p');
+                    theP.className = "right-pane2-p";
+                    theP.innerText = dataRetrieved[currQuesId].response[i].response;
+                    respnseDataDiv.appendChild(theP);
+
+                subHeaderDiv.appendChild(respnseDataDiv);
+
+                let theVoteP = document.createElement('p');
+                theVoteP.className = "vote-cnt";
+                theVoteP.id = `vote-cnt-${i}`;
+                theVoteP.innerText = dataRetrieved[currQuesId].response[i].rspnseVote;
+                subHeaderDiv.appendChild(theVoteP);
+            
+            let voteDiv = document.createElement('div');
+            voteDiv.className = "vote-div";
+
+                let btnUp = document.createElement('button');
+                btnUp.className = "up-vote";
+                btnUp.id = `up-vote-${i}`;
+                btnUp.innerHTML = "&uarr;";
+                voteDiv.appendChild(btnUp);
+                btnUp.addEventListener('click',function(){
+                    console.log(currQuesId,"inside rspnde upbtn openthiss()");
+                    console.log(this.id);
+
+                    let curResId = this.id;
+                    curResId = curResId.replace("up-vote-","");
+
+                    dataRetrieved = JSON.parse(localStorage.getItem('data'));
+                    dataRetrieved[currQuesId].response[curResId].rspnseVote++;
+
+                    let resVoteCntP = document.getElementById(`vote-cnt-${curResId}`);
+                    resVoteCntP.innerText = dataRetrieved[currQuesId].response[curResId].rspnseVote;
+
+                    dataRetrieved = JSON.stringify(dataRetrieved);
+                    localStorage.setItem('data',dataRetrieved);
+                });
+
+                let btnDown = document.createElement('button');
+                btnDown.className = "down-vote";
+                btnDown.id = `down-vote-${i}`;
+                btnDown.innerHTML = "&darr;";
+                voteDiv.appendChild(btnDown);
+                btnDown.addEventListener('click',function(){
+                    console.log(currQuesId,"inside rspnde dwnbtn openthiss()");
+                    console.log(this.id);
+
+                    let curResId = this.id;
+                    curResId = curResId.replace("down-vote-","");
+
+                    dataRetrieved = JSON.parse(localStorage.getItem('data'));
+                    dataRetrieved[currQuesId].response[curResId].rspnseVote--;
+
+                    let resVoteCntP = document.getElementById(`vote-cnt-${curResId}`);
+                    resVoteCntP.innerText = dataRetrieved[currQuesId].response[curResId].rspnseVote;
+
+                    dataRetrieved = JSON.stringify(dataRetrieved);
+                    localStorage.setItem('data',dataRetrieved);
+                });
+
+            subHeaderDiv.appendChild(voteDiv);
+            theDivParent.appendChild(subHeaderDiv);
     }
 }
 

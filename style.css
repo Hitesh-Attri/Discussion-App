@@ -180,6 +180,11 @@ h2{
     cursor: pointer;
 }
 
+#rp2-input-div{
+    height: 80%;
+    /* background-color: #0069d9; */
+}
+
 #show-here,.rp2-input-div,#response-list-parent{
     /* display: grid;
     grid-template-columns:;
@@ -190,7 +195,13 @@ h2{
     text-align: justify;
 }
 
-.response-list-div,#ques-header{
+/* .response-list-div,#ques-header{
+    background-color: #f5f5f5; 
+    padding:0.4rem; 
+    border-radius: 0.2rem;
+    margin-bottom: 0.4rem;
+} */
+.response-list-div,.respnse-data{
     background-color: #f5f5f5; 
     padding:0.4rem; 
     border-radius: 0.2rem;
@@ -201,12 +212,15 @@ h2{
     margin: 0.3rem 0.3rem 0.3rem 0.3rem;
 }
 
-#sub-header{
+.sub-header{
     display: flex;
     justify-content:space-between ;
 }
 
-#ques-header{
+/* #ques-header{
+    width: 90%;
+} */
+.respnse-data{
     width: 90%;
 }
 
@@ -217,12 +231,12 @@ h2{
     margin-left: 0.3rem;
 }
 
-#up-vote,#down-vote{
+.up-vote,.down-vote{
     margin: 0.3rem;
     width: 50%;
 }
 
-#vote-cnt{
+.vote-cnt{
     display: inline; 
     align-self: center;
     margin-left: 0.3rem;
