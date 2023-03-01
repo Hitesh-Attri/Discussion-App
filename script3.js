@@ -67,7 +67,6 @@ submitBtn.addEventListener('click',function(){
             sub:subStr,
             ques:qStr,
             voteCnt:0,
-            // isResolved:0,
             isFav:0,
             response:[]
         }
@@ -78,7 +77,7 @@ submitBtn.addEventListener('click',function(){
         // console.log(dataRetrieved,typeof dataRetrieved,"hh");
 
         dataRetrieved = JSON.stringify(dataRetrieved);
-        console.log(dataRetrieved,typeof dataRetrieved,"jj");
+        // console.log(dataRetrieved,typeof dataRetrieved,"jj");
 
         localStorage.setItem('data',dataRetrieved);
 
@@ -292,6 +291,8 @@ downVoteBtn.addEventListener('click',function(){
     dataRetrieved[currQuesId].voteCnt--;
 
     voteCntP.innerText = dataRetrieved[currQuesId].voteCnt;
+    // voteCntP.id = ;
+    document.getElementById(`vote-cntP-LP-${currQuesId}`).innerText= `Votes: ${dataRetrieved[currQuesId].voteCnt}`;
 
     dataRetrieved = JSON.stringify(dataRetrieved);
     localStorage.setItem('data',dataRetrieved);
@@ -307,6 +308,8 @@ upVoteBtn.addEventListener('click',function(){
 
     voteCntP.innerText = dataRetrieved[currQuesId].voteCnt;
 
+    document.getElementById(`vote-cntP-LP-${currQuesId}`).innerText= `Votes: ${dataRetrieved[currQuesId].voteCnt}`;
+
     dataRetrieved = JSON.stringify(dataRetrieved);
     localStorage.setItem('data',dataRetrieved);
 });
@@ -315,10 +318,63 @@ function removeExcessSpacesAndNewlines(str) {
     return str.replace(/[\s\n]+/g, ' ').trim();
 }
 
+// function showDataScript3(){
+    
+//     dataRetrieved = JSON.parse(localStorage.getItem('data'));
+//     console.log(dataRetrieved,typeof dataRetrieved,"show data");
+
+//     for(let i = 0; i < dataRetrieved.length;i++){
+//         dataRetrieved.id = i;
+
+//         let outerDiv = document.createElement('div');
+//         outerDiv.className = "outer-div";
+//         outerDiv.id = `outer-div-${i}`;
+
+//         let quesDiv = document.createElement('div');
+//         quesDiv.className = "div-ques";
+//         quesDiv.id = `div-ques-${i}`;
+    
+//         let subh3 = document.createElement('h3');
+//         subh3.innerText = dataRetrieved[i].sub;
+//         subh3.id = `subh3-${i}`;
+//         quesDiv.appendChild(subh3);
+//         subh3.addEventListener('click',function(){
+//             rightPane.style.display="none";
+//             rightPane2.style.display="";
+//             currQuesId = subh3.id;
+
+//             openThisQues(currQuesId);
+//         });
+    
+//         let quesP = document.createElement('p');
+//         quesP.innerText = dataRetrieved[i].ques;
+//         quesP.id = `quesP-${i}`;
+//         quesDiv.appendChild(quesP);
+
+//         outerDiv.appendChild(quesDiv);
+
+//         let favBtn = createElement('button');
+//         favBtn.className = "fav-btn";
+//         favBtn.id = `fav-btn-${i}`;
+//         favBtn.innerHTML = "&#9734;";
+//         outerDiv.appendChild(favBtn);
+//         favBtn.addEventListener('click',function(){
+//             console.log("fav clicked");
+//         });
+        
+//         showHereDiv.appendChild(outerDiv);
+//     }
+
+//     dataRetrieved = JSON.stringify(dataRetrieved);
+//     localStorage.setItem('data',dataRetrieved);
+// }
+
 function showData(){
     
     dataRetrieved = JSON.parse(localStorage.getItem('data'));
     console.log(dataRetrieved,typeof dataRetrieved,"show data");
+
+    
 
     for(let i = 0; i < dataRetrieved.length;i++){
         dataRetrieved.id = i;
@@ -344,18 +400,47 @@ function showData(){
         quesP.id = `quesP-${i}`;
         quesDiv.appendChild(quesP);
 
-        // let favBtn = createElement('button'); // document. kon likhega??
-        // favBtn.className = "fav-btn";
-        // favBtn.id = `fav-btn-${i}`;
-        // favBtn.innerHTML = "&#9734;";
-        // quesDiv.appendChild(favBtn);
-        // favBtn.addEventListener('click',function(){
-        //     console.log("fav clicked");
-        // });
+        let favBtn = document.createElement('button');
+        favBtn.className = "fav-btn";
+        favBtn.id = `fav-btn-${i}`;
 
+        // favBtn.innerHTML = "&#9734;";
+        if(dataRetrieved[i].isFav == 0){
+            favBtn.innerHTML = "&#9734;";
+        }else{
+            favBtn.innerHTML = "&#9733;";
+        }
+        quesDiv.appendChild(favBtn);
+        favBtn.addEventListener('click',function(){
+            console.log("fav clicked, id > ",this.id);
+            
+            dataRetrieved = JSON.parse(localStorage.getItem('data'));
+
+            console.log(typeof dataRetrieved,i);
+            if(dataRetrieved[i].isFav == 0){
+                favBtn.innerHTML = "&#9733;";
+                dataRetrieved[i].isFav = 1;
+
+            }else{
+                favBtn.innerHTML = "&#9734;";
+                dataRetrieved[i].isFav = 0;
+            }
+            dataRetrieved  =JSON.stringify(dataRetrieved);
+            localStorage.setItem('data',dataRetrieved);
+        });
+
+        let voteCntP = document.createElement('p');
+        voteCntP.className = "vote-cntP-LP";
+        voteCntP.id = `vote-cntP-LP-${i}`;
+        voteCntP.innerText = `Votes: ${dataRetrieved[i].voteCnt}`;
+        quesDiv.appendChild(voteCntP);
+
+
+        // let testP = document.createElement('p');
+        // testP.innerText = "asdfadf";
+        // quesDiv.appendChild(testP);
 
         showHereDiv.appendChild(quesDiv);
-
     }
 
     dataRetrieved = JSON.stringify(dataRetrieved);
