@@ -242,10 +242,10 @@ responseSubmitBtn.addEventListener('click',function(){
     }
 });
 
-searchQuesInput.addEventListener('input',filterData);
+searchQuesInput.addEventListener('input',inputData);
 
-function filterData(){
-    let filter = searchQuesInput.value.toLowerCase();
+function inputData(){
+    let input = searchQuesInput.value.toLowerCase();
     
     dataRetrieved = JSON.parse(localStorage.getItem('data'));
 
@@ -253,25 +253,32 @@ function filterData(){
 
         let text = dataRetrieved[i].ques;
 
+        // console.log(text,"text");
+
         let theDiv2Id = `div-ques-${i}`;
-        let thePId2 = `quesP-${i}`;
         let theDiv2 = document.getElementById(theDiv2Id);
 
+        let thePId2 = `quesP-${i}`;
         let theP2 = document.getElementById(thePId2);
+        // console.log(theP2.innerText,"theP2Innertext...");
 
-        if(text.toLowerCase().includes(filter.toLowerCase())){
+        if(text.toLowerCase().includes(input.toLowerCase())){
             //style ""
-            console.log("if `` ");
+            // console.log("if `` ");
             theDiv2.style.display = '';
 
             // for highlight
-            // let pattern = new RegExp(`${filter}`,"gi");
+            // let pattern = new RegExp(`${input}`,"gi");
 
             // theP2.innerHTML = theP2.textContent.repeat(pattern,match => `<mark>${matcch}</mark>`);
+
+            let regExp = new RegExp(input,"gi");
+            theP2.innerHTML = (theP2.textContent).replace(regExp, "<mark>$&</mark>");
+
         }
         else{
             //syle none
-            console.log("else `none` ");
+            // console.log("else `none` ");
             theDiv2.style.display = 'none';
         }
     }
