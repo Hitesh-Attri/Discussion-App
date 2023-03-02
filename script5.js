@@ -63,9 +63,10 @@ submitBtn.addEventListener('click',function(){
             ques:qStr,
             voteCnt:0,
             isFav:0,
-            // for time period
+            time:parseInt(Date.now()),
             response:[]
         }
+        console.log(typeof parseInt(Date.now()),"inside submit 1");
 
         dataRetrieved = JSON.parse(localStorage.getItem('data'));
         dataRetrieved.push(obj);
@@ -79,6 +80,25 @@ submitBtn.addEventListener('click',function(){
     }
 });
 
+function getdate(time){
+    let curr=parseInt(Date.now());
+    
+    let sec=parseInt((curr-time)/1000);
+    let s=sec%60;
+    let min=parseInt(sec/60);
+    let m=min%60;
+    let hour=parseInt(m/60);
+    let h=hour%60;
+    if(m==0){
+        return s+" seconds ago";
+    }
+    else if(h==0){
+        return m+" minutes ago";
+    }
+    else
+        return h+" hours ago";
+}
+
 newQuesFormBtn.addEventListener('click',function(){
     // console.log('new Ques Form btn clicked');
 
@@ -90,7 +110,8 @@ resolveBtn.addEventListener('click',function(){
     console.log("resolve btn clicked")
 
     // console.log(currQuesId,"inside resolve");
-    currQuesId = currQuesId.replace("subh3-","");
+    // currQuesId = currQuesId.replace("subh3-","");
+    currQuesId = currQuesId.replace("quesH3-","");
     console.log(currQuesId,"inside resolve");
 
     dataRetrieved = JSON.parse(localStorage.getItem('data'));
@@ -139,7 +160,8 @@ responseSubmitBtn.addEventListener('click',function(){
 
         console.log(currQuesId,"currid inside submit btn");
         
-        currQuesId = currQuesId.replace("subh3-","");
+        // currQuesId = currQuesId.replace("subh3-","");
+        currQuesId = currQuesId.replace("quesH3-","");
 
         dataRetrieved[currQuesId].response.push(responseObj);
 
@@ -193,7 +215,7 @@ responseSubmitBtn.addEventListener('click',function(){
                     dataRetrieved = JSON.parse(localStorage.getItem('data'));
                     dataRetrieved[currQuesId].response[curResId].rspnseVote++;
 
-                    let resVoteCntP = document.getElementById(`vote-cnt-${curResId}`);
+                    let resVoteCntP = document.getElementById(`vote-cntP-${curResId}`);
                     resVoteCntP.innerText = dataRetrieved[currQuesId].response[curResId].rspnseVote;
 
                     dataRetrieved = JSON.stringify(dataRetrieved);
@@ -215,7 +237,7 @@ responseSubmitBtn.addEventListener('click',function(){
                     dataRetrieved = JSON.parse(localStorage.getItem('data'));
                     dataRetrieved[currQuesId].response[curResId].rspnseVote--;
 
-                    let resVoteCntP = document.getElementById(`vote-cnt-${curResId}`);
+                    let resVoteCntP = document.getElementById(`vote-cntP-${curResId}`);
                     resVoteCntP.innerText = dataRetrieved[currQuesId].response[curResId].rspnseVote;
 
                     dataRetrieved = JSON.stringify(dataRetrieved);
@@ -237,14 +259,13 @@ allFavBtn.addEventListener('click',function(){
     console.log("clicked");
 
     if(!isAllFavClicked){
-        // console.log("in if");
         allFavBtn.innerHTML = "&#9733;";
         isAllFavClicked = true;
         showHereDiv.innerHTML="";
+
         showFavs();
 
     }else{
-        // console.log("in else");
         allFavBtn.innerHTML = "&#9734;";
         isAllFavClicked = false;
 
@@ -264,11 +285,17 @@ function inputData(){
 
         // console.log(text,"text");
 
-        let theDiv2Id = `div-ques-${i}`;
+        // lp-quesData-container-0
+        // ques-data-1
+
+        // let theDiv2Id = `div-ques-${i}`;
+        let theDiv2Id = `lp-quesData-container-${i}`;
         let theDiv2 = document.getElementById(theDiv2Id);
 
         let thePId2 = `quesP-${i}`;
+        let theHId2 = `quesH3-${i}`;
         let theP2 = document.getElementById(thePId2);
+        let theH2z = document.getElementById(theHId2);
         // console.log(theP2.innerText,"theP2Innertext...");
 
         if(text.toLowerCase().includes(input.toLowerCase())){
@@ -276,14 +303,9 @@ function inputData(){
             // console.log("if `` ");
             theDiv2.style.display = '';
 
-            // for highlight
-            // let pattern = new RegExp(`${input}`,"gi");
-
-            // theP2.innerHTML = theP2.textContent.repeat(pattern,match => `<mark>${matcch}</mark>`);
-
             let regExp = new RegExp(input,"gi");
             theP2.innerHTML = (theP2.textContent).replace(regExp, "<mark>$&</mark>");
-
+            theH2z.innerHTML = (theH2z.textContent).replace(regExp, "<mark>$&</mark>");
         }
         else{
             theDiv2.style.display = 'none';
@@ -295,12 +317,14 @@ downVoteBtn.addEventListener('click',function(){
     console.log('down vote btn clicked');
     // console.log(currQuesId, typeof currQuesId,"down");
     dataRetrieved = JSON.parse(localStorage.getItem('data'));
-    currQuesId = currQuesId.replace("subh3-","");
+    // currQuesId = currQuesId.replace("subh3-","");
+    currQuesId = currQuesId.replace("quesH3-","");
     dataRetrieved[currQuesId].voteCnt--;
 
     voteCntP.innerText = dataRetrieved[currQuesId].voteCnt;
     // voteCntP.id = ;
-    document.getElementById(`vote-cntP-LP-${currQuesId}`).innerText= `Votes: ${dataRetrieved[currQuesId].voteCnt}`;
+    // document.getElementById(`vote-cntP-LP-${currQuesId}`).innerText= `Votes: ${dataRetrieved[currQuesId].voteCnt}`;
+    document.getElementById(`vote-cnt-${currQuesId}`).innerText= `${dataRetrieved[currQuesId].voteCnt}`;
 
     dataRetrieved = JSON.stringify(dataRetrieved);
     localStorage.setItem('data',dataRetrieved);
@@ -310,13 +334,15 @@ upVoteBtn.addEventListener('click',function(){
     console.log('up vote btn clicked');
     // console.log(currQuesId, typeof currQuesId,"up");
     dataRetrieved = JSON.parse(localStorage.getItem('data'));
-    currQuesId = currQuesId.replace("subh3-","");
+    // currQuesId = currQuesId.replace("subh3-","");
+    currQuesId = currQuesId.replace("quesH3-","");
 
     dataRetrieved[currQuesId].voteCnt++;
 
     voteCntP.innerText = dataRetrieved[currQuesId].voteCnt;
 
-    document.getElementById(`vote-cntP-LP-${currQuesId}`).innerText= `Votes: ${dataRetrieved[currQuesId].voteCnt}`;
+    // document.getElementById(`vote-cntP-LP-${currQuesId}`).innerText= `Votes: ${dataRetrieved[currQuesId].voteCnt}`;
+    document.getElementById(`vote-cnt-${currQuesId}`).innerText= `${dataRetrieved[currQuesId].voteCnt}`;
 
     dataRetrieved = JSON.stringify(dataRetrieved);
     localStorage.setItem('data',dataRetrieved);
@@ -331,141 +357,149 @@ function showData(){
     dataRetrieved = JSON.parse(localStorage.getItem('data'));
     console.log(dataRetrieved,typeof dataRetrieved,"show data");
 
-    // dataRetrieved = dataRetrieved.sort(function(a,b){
-    //     console.log("sorting");
+    dataRetrieved = dataRetrieved.sort(function(a,b){
+        console.log("sorting");
+        if(a.isFav == b.isFav && a.isFav == 1) return 0;
+        if(a.isFav > b.isFav) return -1; // -1
+        else if( a.voteCnt > b.voteCnt ) return -1; // -1
+        else return 1; // 1
+    });
 
-    //     if(a.isFav > b.isFav) return 1;
-    //     else if( a.voteCnt > b.voteCnt ) return -1;
-    //     else if( a.voteCnt < b.voteCnt ) return 1;
-    //     else return 0;
-    // });
+    dataRetrieved = JSON.stringify(dataRetrieved);
+    localStorage.setItem('data',dataRetrieved);
 
-    // console.log(dataRetrieved);
-
-    // dataRetrieved = JSON.stringify(dataRetrieved);
-    // localStorage.setItem('data',dataRetrieved);
-
-    // dataRetrieved = JSON.parse(localStorage.getItem('data'));
+    dataRetrieved = JSON.parse(localStorage.getItem('data'));
 
     for(let i = 0; i < dataRetrieved.length; i++){
-        // console.log("here");
-        // dataRetrieved.id = i;
+        
+        let div1 = document.createElement('div');
+        div1.className = "lp-quesData-container";
+        div1.id = `lp-quesData-container-${i}`;
+        
+            let div2 = document.createElement('div');
+            div2.className = "ques-data";
+            div2.id = `ques-data-${i}`;
 
-        let quesDivPar = document.createElement('div');
-        quesDivPar.className = "div-ques-par";
-        quesDivPar.id = `div-ques-par-${i}`;
-
-            let quesDiv = document.createElement('div');
-            quesDiv.className = "div-ques";
-            quesDiv.id = `div-ques-${i}`;
-
-            quesDivPar.addEventListener('click',function(){
+            div2.addEventListener('click',function(){
                 rightPane.style.display="none";
                 rightPane2.style.display="";
-                currQuesId = subh3.id;
+                currQuesId = theH3.id;
 
                 openThisQues(currQuesId);
             });
-        
-            let subh3 = document.createElement('h3');
-            subh3.innerText = dataRetrieved[i].sub;
-            subh3.id = `subh3-${i}`;
-            quesDiv.appendChild(subh3);
-    
-            let quesP = document.createElement('p');
-            quesP.innerText = dataRetrieved[i].ques;
-            quesP.id = `quesP-${i}`;
-            quesDiv.appendChild(quesP);
 
-        quesDivPar.appendChild(quesDiv);
+                let theH3 = document.createElement('h3');
+                theH3.className = "quesH3";
+                theH3.innerText = dataRetrieved[i].sub;
+                theH3.id = `quesH3-${i}`;
+                div2.appendChild(theH3);
 
-        let favBtn = document.createElement('button');
-        favBtn.className = "fav-btn";
-        favBtn.id = `fav-btn-${i}`;
-        if(dataRetrieved[i].isFav == 0){
-            favBtn.innerHTML = "&#9734;";
-        }else{
-            favBtn.innerHTML = "&#9733;";
-        }
-        quesDivPar.appendChild(favBtn);
-        favBtn.addEventListener('click',function(){
-            // console.log("fav clicked, id > ",this.id);
-            
-            dataRetrieved = JSON.parse(localStorage.getItem('data'));
+                let theP = document.createElement('p');
+                theP.className = "quesP";
+                theP.innerText = dataRetrieved[i].ques;
+                theP.id = `quesP-${i}`;
+                div2.appendChild(theP);
 
-            // console.log(typeof dataRetrieved,i);
-            if(dataRetrieved[i].isFav == 0){
-                favBtn.innerHTML = "&#9733;";
-                dataRetrieved[i].isFav = 1;
+                let theTimeP = document.createElement('p');
+                theTimeP.className = "time";
+                // theTimeP.innerText = `just now`;
+                // theTimeP.innerText = getdate(dataRetrieved[i].time);
+                // console.log(dataRetrieved[i].time, "inside show data function 2", typeof dataRetrieved[i].time);
+                theTimeP.id = `time-${i}`;
+                div2.appendChild(theTimeP);
 
-            }else{
-                favBtn.innerHTML = "&#9734;";
-                dataRetrieved[i].isFav = 0;
-            }
-            dataRetrieved  =JSON.stringify(dataRetrieved);
-            localStorage.setItem('data',dataRetrieved);
-        });
+            div1.appendChild(div2);
 
-        let voteCntP = document.createElement('p');
-        voteCntP.className = "vote-cntP-LP";
-        voteCntP.id = `vote-cntP-LP-${i}`;
-        voteCntP.innerText = `Votes: ${dataRetrieved[i].voteCnt}`;
-        quesDivPar.appendChild(voteCntP);
+            let div3 = document.createElement('div');
+            div3.className = "fav-vote-container";
+            div3.id = `fav-vote-container-${i}`;
 
-        let timeP = document.createElement('p');
-        timeP.className = "time-LP";
-        timeP.id = `time-LP-${i}`;
-        timeP.innerText = `Just now`; //
-        quesDiv.appendChild(timeP);
+                let div4 = document.createElement('div');
+                div4.className = "favBtn-voteCnt";
+                div4.id = `favBtn-voteCnt-${i}`;
 
-        let voteDiv = document.createElement('div');
-            voteDiv.className = "vote-div";
+                    let theFav = document.createElement('button');
+                    theFav.className = "fav-btn";
+                    theFav.id = `fav-btn-${i}`;
+                    // theFav.innerHTML = "&#9734;";
+                    if(dataRetrieved[i].isFav == 0){
+                        theFav.innerHTML = "&#9734;";
+                    }else{
+                        theFav.innerHTML = "&#9733;";
+                    }
+                    
+                    theFav.addEventListener('click',function(){
+                        dataRetrieved = JSON.parse(localStorage.getItem('data'));
+                        // let btnId = this.id;
+                        // btnId = btnId.replace("","");
 
-                let btnUp = document.createElement('button');
-                btnUp.className = "up-vote";
-                btnUp.id = `up-vote-${i}`;
-                btnUp.innerHTML = "&uarr;";
-                voteDiv.appendChild(btnUp);
-                btnUp.addEventListener('click',function(){
-                    console.log('up vote btn clicked');
-                    // console.log(currQuesId, typeof currQuesId,"up");
-                    dataRetrieved = JSON.parse(localStorage.getItem('data'));
-                    currQuesId = currQuesId.replace("subh3-","");
-                
-                    dataRetrieved[currQuesId].voteCnt++;
-                
-                    voteCntP.innerText = dataRetrieved[currQuesId].voteCnt;
-                
-                    document.getElementById(`vote-cntP-LP-${currQuesId}`).innerText= `Votes: ${dataRetrieved[currQuesId].voteCnt}`;
-                
-                    dataRetrieved = JSON.stringify(dataRetrieved);
-                    localStorage.setItem('data',dataRetrieved);
-                });
+                        if(dataRetrieved[i].isFav == 0){
+                            theFav.innerHTML = "&#9733;";
+                            dataRetrieved[i].isFav = 1;
+                        }else{
+                            theFav.innerHTML = "&#9734;";
+                            dataRetrieved[i].isFav = 0;
+                        }
+                        dataRetrieved  =JSON.stringify(dataRetrieved);
+                        localStorage.setItem('data',dataRetrieved);
+                    });
+                    div4.appendChild(theFav);
 
-                let btnDown = document.createElement('button');
-                btnDown.className = "down-vote";
-                btnDown.id = `down-vote-${i}`;
-                btnDown.innerHTML = "&darr;";
-                voteDiv.appendChild(btnDown);
-                btnDown.addEventListener('click',function(){
-                    console.log('down vote btn clicked');
-                    // console.log(currQuesId, typeof currQuesId,"down");
-                    dataRetrieved = JSON.parse(localStorage.getItem('data'));
-                    currQuesId = currQuesId.replace("subh3-","");
-                    dataRetrieved[currQuesId].voteCnt--;
-                
-                    voteCntP.innerText = dataRetrieved[currQuesId].voteCnt;
-                    // voteCntP.id = ;
-                    document.getElementById(`vote-cntP-LP-${currQuesId}`).innerText= `Votes: ${dataRetrieved[currQuesId].voteCnt}`;
-                
-                    dataRetrieved = JSON.stringify(dataRetrieved);
-                    localStorage.setItem('data',dataRetrieved);
-                });
+                div3.appendChild(div4);
 
+                let div5 = document.createElement('div');
+                div5.className = "vote-div";
+                div5.id = `vote-div-${i}`;
 
-        quesDivPar.appendChild(voteDiv);
+                    let theUpBtn = document.createElement('button');
+                    theUpBtn.className = "up-vote";
+                    theUpBtn.id = `up-vote-${i}`;
+                    theUpBtn.innerHTML = "&uarr;";
+                    theUpBtn.addEventListener('click',function(){
+                        dataRetrieved = JSON.parse(localStorage.getItem('data'));
 
-        showHereDiv.appendChild(quesDivPar);
+                        console.log(currQuesId,"up",this.id);
+                        currQuesId = this.id;
+                        currQuesId = currQuesId.replace("up-vote-","");
+                        dataRetrieved[currQuesId].voteCnt++;
+
+                        // voteCntP.innerText = dataRetrieved[currQuesId].voteCnt;
+                        document.getElementById(`vote-cnt-${currQuesId}`).innerText= `${dataRetrieved[currQuesId].voteCnt}`;
+
+                        dataRetrieved = JSON.stringify(dataRetrieved);
+                        localStorage.setItem('data',dataRetrieved);
+                    });
+                    div5.appendChild(theUpBtn);
+
+                    let theVoteP = document.createElement('p');
+                    theVoteP.className = "vote-cnt";
+                    theVoteP.id = `vote-cnt-${i}`;
+                    theVoteP.innerText=dataRetrieved[i].voteCnt;
+                    div5.appendChild(theVoteP);
+
+                    let theDownBtn = document.createElement('button');
+                    theDownBtn.className = "down-vote";
+                    theDownBtn.id = `down-vote-${i}`;
+                    theDownBtn.innerHTML="&darr;";
+                    theDownBtn.addEventListener('click',function(){
+                        dataRetrieved = JSON.parse(localStorage.getItem('data'));
+                        console.log(currQuesId,"down",this.id);
+                        currQuesId = this.id;
+                        currQuesId = currQuesId.replace("down-vote-","");
+                        dataRetrieved[currQuesId].voteCnt--;
+                        // voteCntP.innerText = dataRetrieved[currQuesId].voteCnt;
+                        document.getElementById(`vote-cnt-${currQuesId}`).innerText= `${dataRetrieved[currQuesId].voteCnt}`;
+                        dataRetrieved = JSON.stringify(dataRetrieved);
+                        localStorage.setItem('data',dataRetrieved);
+                    });
+                    div5.appendChild(theDownBtn);
+
+                div3.appendChild(div5);
+
+            div1.appendChild(div3);
+
+        showHereDiv.appendChild(div1);
+
     }
 
     dataRetrieved = JSON.stringify(dataRetrieved);
@@ -477,89 +511,134 @@ function showFavs(){
     dataRetrieved = JSON.parse(localStorage.getItem('data'));
     console.log(dataRetrieved,typeof dataRetrieved,"show data");
 
-    // dataRetrieved = dataRetrieved.sort(function(a,b){
-    //     console.log("sorting");
-
-    //     if(a.isFav > b.isFav) return 1;
-    //     else if( a.voteCnt > b.voteCnt ) return -1;
-    //     else if( a.voteCnt < b.voteCnt ) return 1;
-    //     else return 0;
-    // });
-
-    // console.log(dataRetrieved);
-
-    // dataRetrieved = JSON.stringify(dataRetrieved);
-    // localStorage.setItem('data',dataRetrieved);
-
-    // dataRetrieved = JSON.parse(localStorage.getItem('data'));
 
     for(let i = 0; i < dataRetrieved.length; i++){
         if(dataRetrieved[i].isFav == 1){
-            console.log("here");
-            dataRetrieved.id = i;
-            let quesDiv = document.createElement('div');
-            quesDiv.className = "div-ques";
-            quesDiv.id = `div-ques-${i}`
+            let div1 = document.createElement('div');
+            div1.className = "lp-quesData-container";
+            div1.id = `lp-quesData-container-${i}`;
+            
+                let div2 = document.createElement('div');
+                div2.className = "ques-data";
+                div2.id = `ques-data-${i}`;
 
-            quesDiv.addEventListener('click',function(){
-                rightPane.style.display="none";
-                rightPane2.style.display="";
-                currQuesId = subh3.id;
+                div2.addEventListener('click',function(){
+                    rightPane.style.display="none";
+                    rightPane2.style.display="";
+                    currQuesId = theH3.id;
 
-                openThisQues(currQuesId);
-            });
-        
-            let subh3 = document.createElement('h3');
-            subh3.innerText = dataRetrieved[i].sub;
-            subh3.id = `subh3-${i}`;
-            quesDiv.appendChild(subh3);
+                    openThisQues(currQuesId);
+                });
 
-        
-            let quesP = document.createElement('p');
-            quesP.innerText = dataRetrieved[i].ques;
-            quesP.id = `quesP-${i}`;
-            quesDiv.appendChild(quesP);
+                    let theH3 = document.createElement('h3');
+                    theH3.className = "quesH3";
+                    theH3.innerText = dataRetrieved[i].sub;
+                    theH3.id = `quesH3-${i}`;
+                    div2.appendChild(theH3);
 
-            let favBtn = document.createElement('button');
-            favBtn.className = "fav-btn";
-            favBtn.id = `fav-btn-${i}`;
-            if(dataRetrieved[i].isFav == 0){
-                favBtn.innerHTML = "&#9734;";
-            }else{
-                favBtn.innerHTML = "&#9733;";
-            }
-            quesDiv.appendChild(favBtn);
-            favBtn.addEventListener('click',function(){
-                // console.log("fav clicked, id > ",this.id);
-                
-                dataRetrieved = JSON.parse(localStorage.getItem('data'));
+                    let theP = document.createElement('p');
+                    theP.className = "quesP";
+                    theP.innerText = dataRetrieved[i].ques;
+                    theP.id = `quesP-${i}`;
+                    div2.appendChild(theP);
 
-                // console.log(typeof dataRetrieved,i);
-                if(dataRetrieved[i].isFav == 0){
-                    favBtn.innerHTML = "&#9733;";
-                    dataRetrieved[i].isFav = 1;
+                    let theTimeP = document.createElement('p');
+                    theTimeP.className = "time";
+                    theTimeP.innerText = `just now`;
+                    theTimeP.id = `time-${i}`;
+                    div2.appendChild(theTimeP);
 
-                }else{
-                    favBtn.innerHTML = "&#9734;";
-                    dataRetrieved[i].isFav = 0;
-                }
-                dataRetrieved  =JSON.stringify(dataRetrieved);
-                localStorage.setItem('data',dataRetrieved);
-            });
+                div1.appendChild(div2);
 
-            let voteCntP = document.createElement('p');
-            voteCntP.className = "vote-cntP-LP";
-            voteCntP.id = `vote-cntP-LP-${i}`;
-            voteCntP.innerText = `Votes: ${dataRetrieved[i].voteCnt}`;
-            quesDiv.appendChild(voteCntP);
+                let div3 = document.createElement('div');
+                div3.className = "fav-vote-container";
+                div3.id = `fav-vote-container-${i}`;
 
-            let timeP = document.createElement('p');
-            timeP.className = "time-LP";
-            timeP.id = `time-LP-${i}`;
-            timeP.innerText = `Just now`; //
-            quesDiv.appendChild(timeP);
+                    let div4 = document.createElement('div');
+                    div4.className = "favBtn-voteCnt";
+                    div4.id = `favBtn-voteCnt-${i}`;
 
-            showHereDiv.appendChild(quesDiv);
+                        let theFav = document.createElement('button');
+                        theFav.className = "fav-btn";
+                        theFav.id = `fav-btn-${i}`;
+                        // theFav.innerHTML = "&#9734;";
+                        if(dataRetrieved[i].isFav == 0){
+                            theFav.innerHTML = "&#9734;";
+                        }else{
+                            theFav.innerHTML = "&#9733;";
+                        }
+                        
+                        theFav.addEventListener('click',function(){
+                            dataRetrieved = JSON.parse(localStorage.getItem('data'));
+                            // let btnId = this.id;
+                            // btnId = btnId.replace("","");
+
+                            if(dataRetrieved[i].isFav == 0){
+                                theFav.innerHTML = "&#9733;";
+                                dataRetrieved[i].isFav = 1;
+                            }else{
+                                theFav.innerHTML = "&#9734;";
+                                dataRetrieved[i].isFav = 0;
+                            }
+                            dataRetrieved  =JSON.stringify(dataRetrieved);
+                            localStorage.setItem('data',dataRetrieved);
+                        });
+                        div4.appendChild(theFav);
+
+                    div3.appendChild(div4);
+
+                    let div5 = document.createElement('div');
+                    div5.className = "vote-div";
+                    div5.id = `vote-div-${i}`;
+
+                        let theUpBtn = document.createElement('button');
+                        theUpBtn.className = "up-vote";
+                        theUpBtn.id = `up-vote-${i}`;
+                        theUpBtn.innerHTML = "&uarr;";
+                        theUpBtn.addEventListener('click',function(){
+                            dataRetrieved = JSON.parse(localStorage.getItem('data'));
+
+                            console.log(currQuesId,"up",this.id);
+                            currQuesId = this.id;
+                            currQuesId = currQuesId.replace("up-vote-","");
+                            dataRetrieved[currQuesId].voteCnt++;
+
+                            // voteCntP.innerText = dataRetrieved[currQuesId].voteCnt;
+                            document.getElementById(`vote-cnt-${currQuesId}`).innerText= `${dataRetrieved[currQuesId].voteCnt}`;
+
+                            dataRetrieved = JSON.stringify(dataRetrieved);
+                            localStorage.setItem('data',dataRetrieved);
+                        });
+                        div5.appendChild(theUpBtn);
+
+                        let theVoteP = document.createElement('p');
+                        theVoteP.className = "vote-cnt";
+                        theVoteP.id = `vote-cnt-${i}`;
+                        theVoteP.innerText=dataRetrieved[i].voteCnt;
+                        div5.appendChild(theVoteP);
+
+                        let theDownBtn = document.createElement('button');
+                        theDownBtn.className = "down-vote";
+                        theDownBtn.id = `down-vote-${i}`;
+                        theDownBtn.innerHTML="&darr;";
+                        theDownBtn.addEventListener('click',function(){
+                            dataRetrieved = JSON.parse(localStorage.getItem('data'));
+                            console.log(currQuesId,"down",this.id);
+                            currQuesId = this.id;
+                            currQuesId = currQuesId.replace("down-vote-","");
+                            dataRetrieved[currQuesId].voteCnt--;
+                            // voteCntP.innerText = dataRetrieved[currQuesId].voteCnt;
+                            document.getElementById(`vote-cnt-${currQuesId}`).innerText= `${dataRetrieved[currQuesId].voteCnt}`;
+                            dataRetrieved = JSON.stringify(dataRetrieved);
+                            localStorage.setItem('data',dataRetrieved);
+                        });
+                        div5.appendChild(theDownBtn);
+
+                    div3.appendChild(div5);
+
+                div1.appendChild(div3);
+
+            showHereDiv.appendChild(div1);
         }
     }
 
@@ -567,29 +646,13 @@ function showFavs(){
     localStorage.setItem('data',dataRetrieved);
 }
 
-
 function openThisQues(currQuesId){
     // console.log(currQuesId, typeof currQuesId, "1");
-    currQuesId = currQuesId.replace("subh3-","");
+    // currQuesId = currQuesId.replace("subh3-","");
+    currQuesId = currQuesId.replace("quesH3-","");
 
     console.log(currQuesId, typeof currQuesId, "2");
 
-    // dataRetrieved = JSON.parse(localStorage.getItem('data'));
-    // console.log(dataRetrieved,typeof dataRetrieved,"show data");
-
-    // dataRetrieved = dataRetrieved.sort(function(a,b){
-    //     console.log("sorting");
-
-    //     if(a.isFav > b.isFav) return 1;
-    //     else if( a.voteCnt > b.voteCnt ) return -1;
-    //     else if( a.voteCnt < b.voteCnt ) return 1;
-    //     else return 0;
-    // });
-
-    // console.log(dataRetrieved,"inside the open function ");
-
-    // dataRetrieved = JSON.stringify(dataRetrieved);
-    // localStorage.setItem('data',dataRetrieved);
 
     dataRetrieved = JSON.parse(localStorage.getItem('data'));
 
@@ -632,7 +695,7 @@ function openThisQues(currQuesId){
 
                 let theVoteP = document.createElement('p');
                 theVoteP.className = "vote-cnt";
-                theVoteP.id = `vote-cnt-${i}`;
+                theVoteP.id = `vote-cntR-${i}`;
                 theVoteP.innerText = dataRetrieved[currQuesId].response[i].rspnseVote;
                 subHeaderDiv.appendChild(theVoteP);
             
@@ -654,7 +717,7 @@ function openThisQues(currQuesId){
                     dataRetrieved = JSON.parse(localStorage.getItem('data'));
                     dataRetrieved[currQuesId].response[curResId].rspnseVote++;
 
-                    let resVoteCntP = document.getElementById(`vote-cnt-${curResId}`);
+                    let resVoteCntP = document.getElementById(`vote-cntR-${curResId}`);
                     resVoteCntP.innerText = dataRetrieved[currQuesId].response[curResId].rspnseVote;
 
                     dataRetrieved = JSON.stringify(dataRetrieved);
@@ -677,7 +740,7 @@ function openThisQues(currQuesId){
                     dataRetrieved = JSON.parse(localStorage.getItem('data'));
                     dataRetrieved[currQuesId].response[curResId].rspnseVote--;
 
-                    let resVoteCntP = document.getElementById(`vote-cnt-${curResId}`);
+                    let resVoteCntP = document.getElementById(`vote-cntR-${curResId}`);
                     resVoteCntP.innerText = dataRetrieved[currQuesId].response[curResId].rspnseVote;
 
                     dataRetrieved = JSON.stringify(dataRetrieved);
@@ -698,3 +761,11 @@ function clearFields(){
 }
 
 showData();
+
+setInterval(setTimeOfCmnt,1000);
+function setTimeOfCmnt(){
+    dataRetrieved = JSON.parse(localStorage.getItem('data'));
+    for(let i = 0;i<dataRetrieved.length;i++ ){
+        document.getElementById(`time-${i}`).innerText = getdate(dataRetrieved[i].time);
+    }
+}

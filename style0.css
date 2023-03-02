@@ -95,6 +95,8 @@ h2{
 }
 
 #ques-resolvebtn-div{
+    /* height: 50vh; */
+    /* width: 50vw; */
     background-color: rgb(242, 233, 222);
     padding: 0.5rem;
     padding-bottom: 2rem;
@@ -116,6 +118,10 @@ h2{
     padding-bottom: 2rem;
 }
 
+/* #responseSubmitBtn */
+/* #responeTxt */
+/* #respone-enter-name */
+
 #subject,#question,#submit,#respone-enter-name{
     display: block;
 }
@@ -131,12 +137,13 @@ h2{
     padding: 0.3rem;
     border:0;
     border-radius: 0.2rem;
+    /* position: absolute; */
 }
 #responeTxt{
     height: 4rem;
 }
 
-#submit,#resolveBtn,#responseSubmitBtn,#all-Fav{
+#submit,#resolveBtn,#responseSubmitBtn{
     display: flex;
     float: right;
     color: white;
@@ -155,19 +162,18 @@ h2{
     padding: 0.3rem;
 }
 
-#submit:hover,#resolveBtn:hover,#responseSubmitBtn:hover,#all-Fav:hover{
+#submit:hover,#resolveBtn:hover,#responseSubmitBtn:hover{
     background-color: #468cd7;
 }
-#submit:active,#resolveBtn:active,#responseSubmitBtn:active, #all-Fav:active{
+#submit:active,#resolveBtn:active,#responseSubmitBtn:active{
     box-shadow: 0rem 0rem 0.2rem 0.02rem cyan;
     background-color: #0069d9;
 }
 
 .div-ques{
-    /* border-bottom: 1px solid black; */
+    border-bottom: 1px solid black;
     padding:0.5rem;
-    cursor: pointer;
-    margin-right: auto;
+    /* overflow: auto; */
 }
 
 .div-ques h3{
@@ -206,11 +212,14 @@ h2{
     margin: 0.3rem 0.3rem 0.3rem 0.3rem;
 }
 
-.sub-header,.div-ques-par,.lp-sub-div2{
+.sub-header{
     display: flex;
     justify-content:space-between ;
 }
 
+/* #ques-header{
+    width: 90%;
+} */
 .respnse-data{
     width: 90%;
 }
@@ -231,49 +240,4 @@ h2{
     display: inline; 
     align-self: center;
     margin-left: 0.3rem;
-}
-
-
-
-.lp-quesData-container,.fav-vote-container{
-    display: flex;
-    flex-direction: row;
-    padding: 0.2rem;
-}
-
-.lp-quesData-container{
-    /* background-color: aquamarine; */
-    border-bottom: 1px solid black;
-    cursor: pointer;
-}
-
-.fav-vote-container{
-    width: 20%;
-}
-.ques-data{
-    width: 90%;
-}
-.favBtn-voteCnt{
-    margin-left: auto;
-    margin: auto auto auto auto;
-}
-.vote-div{
-    display: flex;
-    flex-direction: row;
-    padding: 0.3rem;
-    gap:0.3rem;
-    /* float: right; */
-    margin-left: auto;
-}
-.fav-btn{
-    padding: 0.2rem;
-    cursor: pointer;
-}
-.p-sub-div2{
-    display: flex;
-}
-
-.up-vote,.down-vote{
-    padding:0.2rem;
-    cursor: pointer;
 }
